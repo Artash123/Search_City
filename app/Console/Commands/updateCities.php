@@ -39,13 +39,21 @@ class updateCities extends Command
      */
     public function handle()
     {
-        $filename = storage_path('RU.txt');
-
+        $source = "http://download.geonames.org/export/dump/RU.zip";
+        $headers = get_headers($source);
         $lastModificationTs = File::get(storage_path('lastmodification.txt'));
+        if($lastModificationTs != $headers[3]){
 
-
-        $modifiedTs = filemtime($filename);
-        if ($modifiedTs != $lastModificationTs){
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $source);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $data = curl_exec ($ch);
+            curl_close ($ch);
+            $destination = storage_path("RU.zip");
+            $file = fopen($destination, "w+");
+            fputs($file, $data);
+            fclose($file);
+            file_put_contents(storage_path('RU.txt'), file_get_contents('zip://'.storage_path("RU.zip").'#RU.txt'));
             DB::table('ru_cities')->delete();
             $contents = File::get(storage_path('RU.txt'));
             $city_array = explode("\n", $contents);
@@ -57,6 +65,6 @@ class updateCities extends Command
                 );
             }
         }
-        File::put(storage_path('lastmodification.txt'),$modifiedTs);
+        File::put(storage_path('lastmodification.txt'),$headers[3]);
     }
 }

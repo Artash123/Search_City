@@ -11,15 +11,9 @@ use App\Http\Controllers\Controller;
 class IndexController extends Controller
 {
 
-    public static function getInstance(){
-        if(!self::$instance){
-            self::$instance = new static();
-        }
-        return self::$instance;
-    }
+
 
     public function index(){
-
 
         return view('index');
     }
