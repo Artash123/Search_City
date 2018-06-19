@@ -26,7 +26,6 @@ $(function () {
             contentType: false,
             success:function (response) {
 
-                //console.log(response);
                 $('#autocomplate').remove();
                 var div = $('<div  class="highlight" id="autocomplate">')
                 $.each(response, function(index, element) {
@@ -68,7 +67,6 @@ $(function () {
             processData: false,
             contentType: false,
             success:function (response) {
-                console.log(response);
 
                 var uluru = {lat: parseFloat(response[0][1]), lng: parseFloat(response[0][2])};
                 var map = new google.maps.Map(document.getElementById('map'), {
@@ -79,7 +77,6 @@ $(function () {
                 var markersArray = [];
                 for(var i = 0;i<response.length;i++){
                     var currentUser = response[i]
-                    //console.log(currentUser[0])
                     var marker2 = new google.maps.Marker({
                         position: {lat: parseFloat(currentUser[1]), lng: parseFloat(currentUser[2])},
                         map: map,
