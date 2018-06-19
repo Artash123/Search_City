@@ -40,13 +40,6 @@ $(function () {
                 })
 
                 $('#searchBox').append(div);
-                // //console.log(arr);
-                // $( "#searchCity" ).autocomplete({
-                //     classes: {
-                //         "ui-autocomplete": "highlight"
-                //     }
-                // })
-                // $( "#searchCity" ).autocomplete( "option", "source", arr );
             }
         })
     })
@@ -62,6 +55,10 @@ $(function () {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        $(document).on({
+            ajaxStart: function() { $('#waitModal').modal('show');    },
+            ajaxStop: function() { $('#waitModal').modal('hide'); }
+        });
 
         $.ajax({
             method:'post',
@@ -71,11 +68,11 @@ $(function () {
             processData: false,
             contentType: false,
             success:function (response) {
-                //console.log(response);
+                console.log(response);
 
                 var uluru = {lat: parseFloat(response[0][1]), lng: parseFloat(response[0][2])};
                 var map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 9,
+                    zoom: 10,
                     center: uluru
                 });
 

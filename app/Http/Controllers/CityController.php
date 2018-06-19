@@ -35,9 +35,18 @@ class CityController extends Controller
 
         $cities = DB::table('ru_cities')
             ->select('name','lng','lat')
-            ->where('lat', 'like', round($current_lat).'%')
-            ->where('lng', 'like', round($current_lng).'%')
+            ->where('lat', 'like', floor($current_lat).'%')
+            ->where('lng', 'like', floor($current_lng).'%')
+            ->orWhere('lat', 'like', floor($current_lat-1).'%')
+            ->orWhere('lat', 'like', floor($current_lat-1).'%')
+            ->orWhere('lat', 'like', floor($current_lat+1).'%')
+            ->orWhere('lat', 'like', floor($current_lat+1).'%')
             ->get();
+        if(count($cities)<21){
+            $cities = DB::table('ru_cities')
+                ->select('name','lng','lat')
+                ->get();
+        }
         $near_city_arr = [];
         $near_city_arr[0] = [$value, $current_lat, $current_lng];
         for ($i = 1;$i <= 20;$i++) {
