@@ -54,10 +54,6 @@ $(function () {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        $(document).on({
-            ajaxStart: function() { $('#waitModal').modal('show');    },
-            ajaxStop: function() { $('#waitModal').modal('hide'); }
-        });
 
         $.ajax({
             method:'post',

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class CityController extends Controller
 {
     protected function index(){
-        echo 'ggg';
+       
     }
 
     protected function autocomplate(Request $request){
@@ -33,19 +33,17 @@ class CityController extends Controller
         $current_lng = $current_city[0]->lng;
         $arr = [$current_lat,$current_lng];
 
-        $cities = DB::table('ru_cities')
-            ->select('name','lng','lat')
-            ->where('lat', 'like', floor($current_lat).'%')
-            ->where('lng', 'like', floor($current_lng).'%')
-            ->orWhere('lat', 'like', floor($current_lat-1).'%')
-            ->orWhere('lat', 'like', floor($current_lat-1).'%')
-            ->orWhere('lat', 'like', floor($current_lat+1).'%')
-            ->orWhere('lat', 'like', floor($current_lat+1).'%')
-            ->get();
-        if(count($cities)<21){
+        $cities = [];
+        $i = 0.5;
+        while (count($cities)<21) {
             $cities = DB::table('ru_cities')
-                ->select('name','lng','lat')
+                ->select('name', 'lng', 'lat')
+                ->where('lat', '>', $current_lat - $i)
+                ->where('lat', '<', $current_lat + $i)
+                ->where('lng', '>', $current_lng - $i)
+                ->where('lng', '<', $current_lng + $i)
                 ->get();
+            $i++;
         }
         $near_city_arr = [];
         $near_city_arr[0] = [$value, $current_lat, $current_lng];
